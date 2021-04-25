@@ -24,15 +24,13 @@ from torch.utils.data import DataLoader
 
 
 def defect_detection(input_name_model,test_size, opt):
-    to_download = 0
     scale = int(opt.size_image)
     pos_class = opt.pos_class
     alpha = int(opt.alpha)
-    data = 'mvtec'
     path =  "mvtec_test_scale" + str(scale) + "_" + str(pos_class) + "_" + str(opt.num_images)
-    if (os.path.exists(path)==True) and (to_download == 0):
-        xTest_input = np.load(path + "/" + str(data) + "_data_test_" + str(pos_class) + str(scale) +  "_" + str(opt.index_download) + ".npy")
-        yTest_input = np.load(path + "/" + str(data) + "_labels_test_" + str(pos_class) + str(scale) +  "_" + str(opt.index_download) + ".npy")
+    if os.path.exists(path)==True:
+        xTest_input = np.load(path + "/mvtec_data_test_" + str(pos_class) + str(scale) +  "_" + str(opt.index_download) + ".npy")
+        yTest_input = np.load(path + "/mvtec_labels_test_" + str(pos_class) + str(scale) +  "_" + str(opt.index_download) + ".npy")
     else:
         if os.path.exists(path) == False:
             print("path not exists")
@@ -58,6 +56,8 @@ def defect_detection(input_name_model,test_size, opt):
             mini = torch.min(scores_per_scale_dict[scale])
             scores_per_scale_dict[scale] = (scores_per_scale_dict[scale] - mini) / (maxi - mini)
         return scores_per_scale_dict
+
+    transformations_list = np.load("TrainedModels/" + str(opt.input_name)[:-4] +  "/transformations.npy")
 
     with torch.no_grad():
         for i in range(batch_n):
@@ -86,7 +86,7 @@ def defect_detection(input_name_model,test_size, opt):
                 for index_image in range(int(opt.num_images)):
                     score_image_in_scale = 0
                     reals_transform = []
-                    for index_transform, pair in enumerate(opt.list_transformations):
+                    for index_transform, pair in enumerate(transformations_list):
                         real = reals[index_image][scale_num].to(opt.device)
                         flag_color, is_flip, tx, ty, k_rotate = pair
                         real_augment = apply_augmentation(real, is_flip, tx, ty, k_rotate, flag_color).to(opt.device)
@@ -101,18 +101,18 @@ def defect_detection(input_name_model,test_size, opt):
                         output = output.to(opt.device)
                     reshaped_output = output.permute(0, 2, 3, 1).contiguous()
                     shape = reshaped_output.shape
-                    reshaped_output = reshaped_output.view(-1, shape[3])  # 25,73
-                    reshaped_output = reshaped_output[:, :opt.num_transforms]  # 1,72,5,5
+                    reshaped_output = reshaped_output.view(-1, shape[3])
+                    reshaped_output = reshaped_output[:, :opt.num_transforms]
                     m = nn.Softmax(dim=1)
-                    score_temp = m(reshaped_output)
-                    score_all = score_temp.reshape(opt.num_transforms, -1, opt.num_transforms)
+                    score_softmax = m(reshaped_output)
+                    score_all = score_softmax.reshape(opt.num_transforms, -1, opt.num_transforms)
                     for j in range(opt.num_transforms):
-                        current = score_all[j]
-                        score_temp = current[:, j]
-                        sorted_err_scale, indices = torch.sort(score_temp, descending=False, dim=0)
-                        temp = int(sorted_err_scale.shape[0]* opt.fraction)
-                        score_temp = torch.mean(sorted_err_scale[:temp])
-                        score_image_in_scale += score_temp
+                        current_transform = score_all[j]
+                        score_transform = current_transform[:, j]
+                        sorted_score_transform, indices = torch.sort(score_transform, descending=False, dim=0)
+                        num_patches = int(sorted_score_transform.shape[0]* opt.fraction)
+                        score_transform = torch.mean(sorted_score_transform[:num_patches])
+                        score_image_in_scale += score_transform
                     err_scale.append(score_image_in_scale)
                 err_scale = torch.stack(err_scale)
                 err = torch.max(err_scale, dim=0)[0]
@@ -138,4 +138,7 @@ def defect_detection(input_name_model,test_size, opt):
             auc1 = roc_auc_score(yTest_input, probs_predictions_norm_all)
             print("roc_auc_score T1 normalize all ={}".format(auc1), file=text_file)
 
+    path = "mvtec_test_scale" + str(scale) + "_" + str(pos_class) + "_" + str(opt.num_images)
+    os.remove(path + "/mvtec_data_test_" + str(pos_class) + str(scale) + "_" + str(opt.index_download) + ".npy")
+    os.remove(path + "/mvtec_labels_test_" + str(pos_class) + str(scale) + "_" + str(opt.index_download) + ".npy")
     del xTest_input, yTest_input
