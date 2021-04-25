@@ -29,14 +29,15 @@ python main_train.py  --num_images <num_training_images>  --pos_class <normal_cl
 
 Common training options:
 ```
---min_size          image minimal size at the coarser scale (default 25)
---max_size          image minimal size at the coarser scale (default 64)
---niter             number of iterations to train per scale
---num_images        number of images to train on (1,5,10 in the paper)
---size_image        the original image size (default 128*128)
---fraction_defect   the number of patches to consider in defect detection (recommended arguments: 0.01-0.1)
---pos_class         the normal class to train on
---dataset           paris/cifar/mnist/fashionmnist/mvtec
+--min_size                  image minimal size at the coarser scale (default 25)
+--max_size                  image minimal size at the coarser scale (default 64)
+--niter                     number of iterations to train per scale
+--num_images                number of images to train on (1,5,10 in the paper)
+--size_image                the original image size (default 128*128)
+--fraction_defect           the number of patches to consider in defect detection (recommended arguments: 0.01-0.1)
+--pos_class                 the normal class to train on
+--dataset                   paris/cifar/mnist/fashionmnist/mvtec
+--random_images_download    "True" if training random images from the normal class (otherwise, specify the index of the training image in --index_download)
 ```
 
 ##  Results and applications
