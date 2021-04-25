@@ -15,7 +15,6 @@ import os, sys
 
 
 def anomaly_detection(input_name_model,test_size, opt):
-    to_download = 0
     scale = int(opt.size_image)
     pos_class = opt.pos_class
 
@@ -24,7 +23,7 @@ def anomaly_detection(input_name_model,test_size, opt):
     num_images = opt.num_images
 
     path = str(data) + "_test_scale" + str(scale) + "_" + str(pos_class) + "_" + str(num_images)
-    if (os.path.exists(path)==True) and (to_download == 0):
+    if (os.path.exists(path)==True):
 
         xTest_input = np.load(path + "/" + str(data) + "_data_test_" + str(pos_class) + str(scale) +  "_" + str(opt.index_download) + ".npy")
         yTest_input = np.load(path + "/" + str(data) + "_labels_test_" + str(pos_class) + str(scale) +  "_" + str(opt.index_download) + ".npy")
@@ -80,8 +79,8 @@ def anomaly_detection(input_name_model,test_size, opt):
             err_total,err_total_avg, err_total_abs = [],[],[]
 
             for scale_num in range(0, opt.stop_scale+1  , 1):
-                opt.nfc = min(opt.nfc_init * pow(2, math.floor(scale_num / 4)), 128)
-                opt.min_nfc = min(opt.min_nfc_init * pow(2, math.floor(scale_num / 4)), 128)
+                opt.nfc = min(opt.nfc_init * pow(2, math.floor(scale_num / 4)), opt.size_image)
+                opt.min_nfc = min(opt.min_nfc_init * pow(2, math.floor(scale_num / 4)), opt.size_image)
                 netD = models.WDiscriminatorMulti(opt)
                 if torch.cuda.device_count() > 1:
                     netD = DataParallelModel(netD, device_ids=opt.device_ids)

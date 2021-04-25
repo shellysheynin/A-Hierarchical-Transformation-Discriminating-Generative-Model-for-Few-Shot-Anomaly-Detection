@@ -21,7 +21,6 @@ if __name__ == '__main__':
     parser.add_argument('--policy', default='')
     parser.add_argument('--index_download', help='index in dataset for starting download', type=int, default=1)
     parser.add_argument('--use_internal_load', help='using another dataset', default=False)
-    parser.add_argument('--experiment', help='task to be done', default='stop_signs')
     parser.add_argument('--test_size', help='test size', type=int, default=10000)
     parser.add_argument('--num_transforms', help='54 for rgb, 42 for grayscale', type=int, default=4)
     parser.add_argument('--device_ids', help='gpus ids in format: 0/ 0 1/ 0 1 2..', nargs='+', type=int, default=0)

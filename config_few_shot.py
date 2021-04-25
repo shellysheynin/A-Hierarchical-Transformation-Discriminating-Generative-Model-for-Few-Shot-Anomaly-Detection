@@ -30,7 +30,7 @@ def get_arguments():
     parser.add_argument('--max_size', type=int, help='image minimal size at the coarser scale', default=64)
 
     # optimization hyper parameters:
-    parser.add_argument('--niter', type=int, default=5000, help='number of iterations to train per scale')
+    parser.add_argument('--niter', type=int, default=2000, help='number of iterations to train per scale')
     parser.add_argument('--gamma', type=float, help='scheduler gamma', default=0.1)
     parser.add_argument('--lr_g', type=float, default=0.0005, help='learning rate, default=0.0005')
     parser.add_argument('--lr_d', type=float, default=0.0005, help='learning rate, default=0.0005')
