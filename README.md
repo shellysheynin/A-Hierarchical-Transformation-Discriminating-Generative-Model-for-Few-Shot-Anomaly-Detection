@@ -31,7 +31,8 @@ python main_train.py  --num_images 1  --pos_class <normal_class_in_dataset> --in
 
 ##  Applications
 The model can be also used for defect detection:
- ![](Images/mvtec_results.png)
+<img src="Images/mvtec_results.png" width="400px">
+
 See section 3.3 in our [paper]() for more details.
 
 
