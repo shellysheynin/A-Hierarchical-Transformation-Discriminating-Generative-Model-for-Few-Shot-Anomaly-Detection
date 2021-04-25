@@ -73,7 +73,6 @@ def anomaly_detection(input_name_model,test_size, opt):
             real = imresize_to_shape(real, (scale,scale), opt)
             functions.adjust_scales2image(real, opt)
             real = imresize(real, opt.scale1, opt)
-            print(real.shape)
             for index_image in range(int(opt.num_images)):
                 reals[index_image] = []
                 reals = functions.creat_reals_pyramid(real, reals, opt,index_image)
