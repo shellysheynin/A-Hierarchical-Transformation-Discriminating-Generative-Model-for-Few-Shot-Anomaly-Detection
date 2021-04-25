@@ -20,8 +20,6 @@ In this work, we consider the setting of few-shot anomaly detection in images, w
 python -m pip install -r requirements.txt
 ```
 
-This code was tested with python 3.6  
-
 ###  Train
 To train the model on mvtec/paris/cifar/mnist/fashionMnist:
 
