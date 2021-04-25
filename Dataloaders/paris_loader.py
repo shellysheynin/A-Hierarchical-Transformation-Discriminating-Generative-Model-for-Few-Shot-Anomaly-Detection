@@ -37,18 +37,32 @@ def download_class_paris(opt):
     path_lines_ok = "Paris/lab/" + str(pos_class) + "_ok.txt" # take images from this file
     with open(path_lines_ok, "r") as f:
         lines_ok= f.readlines()
-        for line in lines_ok:
-            path = line.strip("\n")
-            t = cv2.imread("Paris/jpg/1/" + str(path) + ".jpg")
-            imsave(t, count_images)
-            dicty[count_images] = path
-            count_images += 1
-            if count_images == num_images: step_index +=1
-            if step_index == opt.index_download: break
-            if count_images == num_images and step_index != opt.index_download: count_images=0
-
+        if opt.random_images_download == False:
+            for line in lines_ok:
+                path = line.strip("\n")
+                t = cv2.imread("Paris/jpg/1/" + str(path) + ".jpg")
+                imsave(t, count_images)
+                dicty[count_images] = path
+                count_images += 1
+                if count_images == num_images: step_index +=1
+                if step_index == opt.index_download: break
+                if count_images == num_images and step_index != opt.index_download: count_images=0
+        else:
+            random_index = random.sample(range(0, len(lines_ok)), opt.num_images)
+            training_images = list(random_index)
+            count_images = 0
+            for i, line in enumerate(lines_ok):
+                if i in training_images:
+                    path = line.strip("\n")
+                    t = cv2.imread("Paris/jpg/1/" + str(path) + ".jpg")
+                    imsave(t, count_images)
+                    dicty[count_images] = path
+                    count_images += 1
+                    if count_images == num_images: step_index += 1
     training_images = list(dicty.values())
     print("training imgaes: ", training_images)
+
+
     if opt.mode == "train":
 
         genertator0 = itertools.product((0,), (False, True), (-1, 1, 0), (-1,), (0,))

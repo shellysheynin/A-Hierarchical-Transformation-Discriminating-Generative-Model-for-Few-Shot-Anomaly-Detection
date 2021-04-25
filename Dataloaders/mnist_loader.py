@@ -19,22 +19,36 @@ def download_class_mnist(opt):
     def imsave(img, i):
         transform = transforms.Compose([transforms.ToPILImage(), transforms.Resize((scale, scale))])
         im = transform(img)
-        cv2.imwrite("Input/Images/mnist_train_numImages_" + str(opt.num_images) +"_" + str(opt.policy) + "_" + str(pos_class)
-                + "_indexdown" +str(opt.index_download) + "_" + str(i) + ".png", im)
+        im.save("Input/Images/mnist_train_numImages_" + str(opt.num_images) +"_" + str(opt.policy) + "_" + str(pos_class)
+                    + "_indexdown" +str(opt.index_download) + "_" + str(i) + ".png")
 
     if opt.mode == "train":
         trainset = datasets.MNIST('./mnist_data', download=True, train=True)
         train_data = np.array(trainset.data)
         train_labels = np.array(trainset.targets)
         train_data = train_data[np.where(train_labels == int(pos_class))]
-        count_images,step_index = 0,0
-        for i in range(len(train_data)):
-            t = train_data[i]
-            imsave(t, count_images)
-            count_images += 1
-            if count_images == num_images: step_index +=1
-            if step_index == opt.index_download: break
-            if count_images == num_images and step_index != opt.index_download: count_images=0
+
+        dicty = {}
+        if opt.random_images_download == False:
+            count_images, step_index = 0, 0
+            for i in range(len(train_data)):
+                t = train_data[i]
+                imsave(t, count_images)
+                dicty[count_images] = i
+                count_images += 1
+                if count_images == num_images: step_index += 1
+                if step_index == opt.index_download: break
+                if count_images == num_images and step_index != opt.index_download: count_images = 0
+            training_images = list(dicty.values())
+        else:
+            random_index = random.sample(range(0, len(train_data)), opt.num_images)
+            training_images = list(random_index)
+            for i in range(len(training_images)):
+                index = training_images[i]
+                t = train_data[index]
+                imsave(t, i)
+        print("training imgaes: ", training_images)
+
         genertator0 = itertools.product((0,), (False, True), (-1, 1, 0), (-1,), (0,))
         genertator1 = itertools.product((0,), (False, True), (0, 1), (0, 1), (0, 1, 2, 3))
         genertator3 = itertools.product((0,), (False, True), (-1,), (1, 0), (0,))

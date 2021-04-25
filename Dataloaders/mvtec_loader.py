@@ -153,14 +153,30 @@ def download_class_mvtec(opt):
         trainloader = DataLoader(trainset, batch_size=len(trainset), pin_memory=True)
         dataiter = iter(trainloader)
         images, _ = dataiter.next()
-        count_images,step_index = 0,0
-        for i in range(images.shape[0]):
-            t = images[i]
-            imsave(t, count_images)
-            count_images += 1
-            if count_images == num_images: step_index +=1
-            if step_index == opt.index_download: break
-            if count_images == num_images and step_index != opt.index_download: count_images=0
+        dicty = {}
+        if opt.random_images_download == False:
+            count_images,step_index = 0,0
+            for i in range(images.shape[0]):
+                t = images[i]
+                imsave(t, count_images)
+                dicty[count_images] = i
+                count_images += 1
+                if count_images == num_images: step_index +=1
+                if step_index == opt.index_download: break
+                if count_images == num_images and step_index != opt.index_download: count_images=0
+            training_images = list(dicty.values())
+
+        else:
+            random_index = random.sample(range(0, images.shape[0]), opt.num_images)
+            training_images = list(random_index)
+            for i in range(len(training_images)):
+                index = training_images[i]
+                t = images[index]
+                imsave(t,i)
+        print("training imgaes: ", training_images)
+
+
+
         genertator0 = itertools.product((0,), (False, True), (-1, 1, 0), (-1,), (0,))
         genertator1 = itertools.product((0,), (False, True), (0, 1), (0, 1), (0, 1, 2, 3))
         genertator2 = itertools.product((1,), (False, True), (0,), (0,), (0, 1, 2, 3))
