@@ -39,7 +39,7 @@ Common training options:
 --fraction_defect   the number of patches to consider in defect detection (recommended arguments: 0.01-0.1)
 --pos_class         the normal class to train on
 --dataset           paris/cifar/mnist/fashionmnist/mvtec
-
+```
 
 ##  Results and applications
 
