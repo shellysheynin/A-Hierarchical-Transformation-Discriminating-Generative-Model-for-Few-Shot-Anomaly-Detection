@@ -22,7 +22,6 @@ def download_class_cifar(opt):
                      'deer': 4, 'dog': 5, 'frog': 6, 'horse': 7, 'ship': 8, 'truck': 9}
     true_label = name_to_label[pos_class]
     def imsave(img, i):
-        print(img.shape)
         im = Image.fromarray(img.astype(np.uint8)).resize((scale,scale))
 
         im.save("Input/Images/cifar_train_numImages_" + str(opt.num_images) +"_" + str(opt.policy) + "_" + str(pos_class)
@@ -34,7 +33,6 @@ def download_class_cifar(opt):
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         eq_V = clahe.apply(V)
         im = cv2.cvtColor(cv2.merge([H, S, eq_V]), cv2.COLOR_HSV2RGB)
-        print(im.shape)
         cv2.imwrite("Input/Images/cifar_train_numImages_" + str(opt.num_images) +"_" + str(opt.policy) + "_" + str(pos_class)
                 + "_indexdown" +str(opt.index_download) + "_" + str(i) + ".png", im)
 
