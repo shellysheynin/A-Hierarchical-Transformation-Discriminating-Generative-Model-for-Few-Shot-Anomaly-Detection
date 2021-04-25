@@ -1,0 +1,12 @@
+scikit-image
+scikit-learn
+scikit-metrics
+scipy
+numpy
+torch
+torchvision
+tqdm
+opencv-python
+Pillow
+kornia
+itertools
