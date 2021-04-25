@@ -26,8 +26,9 @@ This code was tested with python 3.6
 To train the model on mvtec/paris/cifar/mnist/fashionMnist:
 
 ![](Images/paris_results.jpg)
+```
 python main_train.py  --num_images 1  --pos_class <normal_class_in_dataset> --index_download <index_of_training_image> --dataset <name_of_dataset>
-
+```
 
 ##  Applications
 The model can be also used for defect detection:
