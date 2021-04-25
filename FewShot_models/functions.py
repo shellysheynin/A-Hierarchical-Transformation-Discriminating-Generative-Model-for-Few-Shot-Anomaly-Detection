@@ -188,20 +188,11 @@ def read_image2np(opt):
 
 def collect_reals(opt, reals, Zs, NoiseAmp):
 
-    if opt.use_internal_load:
-        from main.main_helpers import get_loader
-        train_loader, test_loader, test_one_loader = get_loader(opt)
-        train_iter = iter(train_loader)
-
     for index_image in range(int(opt.num_images)):
 
-        if opt.use_internal_load:
-            real_ = read_image(opt, index_image, train_iter_next=train_iter.next())
-        else:
-            real_ = read_image(opt, index_image)
+        real_ = read_image(opt, index_image)
         in_s, scale_num = 0, 0
         real = imresize(real_, opt.scale1, opt)
-        print("original image shape: " ,real.shape)
         reals[index_image] = []
         Zs[index_image] = []
         NoiseAmp[index_image] = []
@@ -225,7 +216,6 @@ def save_networks(netG,netD,z,opt):
 
 def adjust_scales2image(real_,opt):
     #opt.num_scales = int((math.log(math.pow(opt.min_size / (real_.shape[2]), 1), opt.scale_factor_init))) + 1
-    print(real_.shape)
     opt.num_scales = math.ceil((math.log(math.pow(opt.min_size / (min(real_.shape[2], real_.shape[3])), 1), opt.scale_factor_init))) + 1
     scale2stop = math.ceil(math.log(min([opt.max_size, max([real_.shape[2], real_.shape[3]])]) / max([real_.shape[2], real_.shape[3]]),opt.scale_factor_init))
     opt.stop_scale = opt.num_scales - scale2stop
@@ -235,7 +225,6 @@ def adjust_scales2image(real_,opt):
     opt.scale_factor = math.pow(opt.min_size/(min(real.shape[2],real.shape[3])),1/(opt.stop_scale))
     scale2stop = math.ceil(math.log(min([opt.max_size, max([real_.shape[2], real_.shape[3]])]) / max([real_.shape[2], real_.shape[3]]),opt.scale_factor_init))
     opt.stop_scale = opt.num_scales - scale2stop
-    print(opt.stop_scale)
     if opt.min_size == opt.max_size:
         opt.stop_scale = 0
     return real
@@ -274,8 +263,6 @@ def creat_reals_pyramid_v2(real, opt):
 def load_trained_pyramid(opt, mode_='train'):
     mode = opt.mode
     opt.mode = 'train'
-    if (mode == 'animation_train') | (mode == 'SR_train') | (mode == 'paint_train'):
-        opt.mode = mode
     dir = generate_dir2save(opt)
     if(os.path.exists(dir)):
         Gs = torch.load('%s/Gs.pth' % dir)
@@ -300,31 +287,14 @@ def generate_dir2save(opt):
     dir2save = None
     if (opt.mode == 'train') | (opt.mode == 'SR_train'):
         dir2save = 'TrainedModels/%s/scale_factor=%f,alpha=%d' % (opt.input_name[:-4], opt.scale_factor_init,opt.alpha)
-    elif (opt.mode == 'animation_train') :
-        dir2save = 'TrainedModels/%s/scale_factor=%f_noise_padding' % (opt.input_name[:-4], opt.scale_factor_init)
-    elif (opt.mode == 'paint_train') :
-        dir2save = 'TrainedModels/%s/scale_factor=%f_paint/start_scale=%d' % (opt.input_name[:-4], opt.scale_factor_init,opt.paint_start_scale)
     elif opt.mode == 'random_samples':
         dir2save = '%s/RandomSamples/%s/gen_start_scale=%d' % (opt.out,opt.input_name[:-4], opt.gen_start_scale)
     elif opt.mode == 'random_samples_arbitrary_sizes':
         dir2save = '%s/RandomSamples_ArbitrerySizes/%s/scale_v=%f_scale_h=%f' % (opt.out,opt.input_name[:-4], opt.scale_v, opt.scale_h)
-    elif opt.mode == 'animation':
-        dir2save = '%s/Animation/%s' % (opt.out, opt.input_name[:-4])
-    elif opt.mode == 'SR':
-        dir2save = '%s/SR/%s' % (opt.out, opt.sr_factor)
-    elif opt.mode == 'harmonization':
-        dir2save = '%s/Harmonization/%s/%s_out' % (opt.out, opt.input_name[:-4],opt.ref_name[:-4])
-    elif opt.mode == 'editing':
-        dir2save = '%s/Editing/%s/%s_out' % (opt.out, opt.input_name[:-4],opt.ref_name[:-4])
-    elif opt.mode == 'paint2image':
-        dir2save = '%s/Paint2image/%s/%s_out' % (opt.out, opt.input_name[:-4],opt.ref_name[:-4])
-        if opt.quantization_flag:
-            dir2save = '%s_quantized' % dir2save
     return dir2save
 
 def post_config(opt, input_dir=None):
     # init fixed parameters
-
 
     use_cuda = torch.cuda.is_available()
     if use_cuda:
@@ -344,8 +314,7 @@ def post_config(opt, input_dir=None):
         opt.out_ = 'TrainedModels/%s/scale_factor=%f/' % (opt.input_dir, opt.scale_factor)
     else:
         opt.out_ = 'TrainedModels/%s/scale_factor=%f/' % (opt.input_name[:-4], opt.scale_factor)
-    if opt.mode == 'SR':
-        opt.alpha = 100
+
 
     if opt.manualSeed is None:
         opt.manualSeed = random.randint(1, 10000)
@@ -392,10 +361,7 @@ def quant2centers(paint, centers):
 
 
 def dilate_mask(mask,opt):
-    if opt.mode == "harmonization":
-        element = morphology.disk(radius=7)
-    if opt.mode == "editing":
-        element = morphology.disk(radius=20)
+
     mask = torch2uint8(mask)
     mask = mask[:,:,0]
     mask = morphology.binary_dilation(mask,selem=element)
