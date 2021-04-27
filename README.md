@@ -1,7 +1,8 @@
 # A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection
 
-[Project]() | [Arxiv]() |  [Supplementary](<a href="Images/Supplementary.pdf"></a>)
-)
+[Project]() | [Arxiv]() |  [Supplementary](<a href="Images/Supplementary.pdf"class="image fit"><img src="Images/Supplementary.png" alt=""></a>)
+<a href="/pdfs/ProjMarr_slides.pdf" class="image fit"><img src="images/marr_pic.jpg" alt=""></a>
+
 ### Official pytorch implementation of the paper: "A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection"
 
 ## Abstract 
