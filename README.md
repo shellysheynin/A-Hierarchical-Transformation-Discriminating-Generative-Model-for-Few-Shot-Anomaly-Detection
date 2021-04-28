@@ -57,5 +57,9 @@ See section 3.3 in our [paper]() for more details.
 ### Citation
 If you use this code for your research, please cite our paper:
 
+The implementation is based on the architecture of [SinGAN](https://github.com/tamarott/SinGAN)
+
+
+
 ```
 
