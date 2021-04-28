@@ -121,6 +121,7 @@ def download_class_paris(opt):
 
     opt.input_name = "paris_train_numImages_" + str(opt.num_images) + "_" + str(opt.policy) + "_" + str(pos_class) \
     + "_indexdown" + str(opt.index_download) + ".png"
+    opt.size_image = 450
 
 
     return opt.input_name

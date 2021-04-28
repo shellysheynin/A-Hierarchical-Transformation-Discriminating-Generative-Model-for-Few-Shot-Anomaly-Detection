@@ -22,8 +22,8 @@ def download_class_cifar(opt):
                      'deer': 4, 'dog': 5, 'frog': 6, 'horse': 7, 'ship': 8, 'truck': 9}
     true_label = name_to_label[pos_class]
     def imsave(img, i):
+        # im = Image.fromarray(img.astype(np.uint8)).resize((scale,scale))
         im = Image.fromarray(img.astype(np.uint8)).resize((scale,scale))
-
         im.save("Input/Images/cifar_train_numImages_" + str(opt.num_images) +"_" + str(opt.policy) + "_" + str(pos_class)
                 + "_indexdown" +str(opt.index_download) + "_" + str(i) + ".png")
         im = cv2.imread("Input/Images/cifar_train_numImages_" + str(opt.num_images) +"_" + str(opt.policy) + "_" + str(pos_class)
