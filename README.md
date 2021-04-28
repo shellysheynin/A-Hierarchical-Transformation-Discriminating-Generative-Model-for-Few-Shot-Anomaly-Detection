@@ -1,8 +1,8 @@
-# A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection
+# HTDG
 
 [Project]() | [Arxiv]() 
 
-### Official pytorch implementation of the paper: "A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection"
+### Official pytorch implementation of the paper: "HTDG: A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection"
 
 ## Abstract 
 
