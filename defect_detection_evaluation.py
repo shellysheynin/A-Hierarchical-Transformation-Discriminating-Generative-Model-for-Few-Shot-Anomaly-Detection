@@ -110,7 +110,7 @@ def defect_detection(input_name_model,test_size, opt):
                         current_transform = score_all[j]
                         score_transform = current_transform[:, j]
                         sorted_score_transform, indices = torch.sort(score_transform, descending=False, dim=0)
-                        num_patches = int(sorted_score_transform.shape[0]* opt.fraction)
+                        num_patches = int(sorted_score_transform.shape[0]* opt.fraction_defect)
                         score_transform = torch.mean(sorted_score_transform[:num_patches])
                         score_image_in_scale += score_transform
                     err_scale.append(score_image_in_scale)
@@ -124,7 +124,7 @@ def defect_detection(input_name_model,test_size, opt):
             probs_predictions.append(avg_err_total)
 
 
-        with open(opt.input_name + "_fraction_" + str(opt.fraction) + ".txt", "w") as text_file:
+        with open(opt.input_name + "_fraction_" + str(opt.fraction_defect) + ".txt", "w") as text_file:
             print(pos_class, "results: ", file=text_file)
             print(" ", file=text_file)
             print("results without norm, without top_k: ", file=text_file)
