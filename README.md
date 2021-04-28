@@ -34,7 +34,7 @@ Common training options:
 --max_size                  image minimal size at the coarser scale (default 64)
 --niter                     number of iterations to train per scale
 --num_images                number of images to train on (1,5,10 in the paper)
---size_image                the original image size (default 128*128)
+--size_image                the original image size 
 --fraction_defect           the number of patches to consider in defect detection (recommended arguments: 0.01-0.1)
 --pos_class                 the normal class to train on
 --dataset                   paris/cifar/mnist/fashionmnist/mvtec
