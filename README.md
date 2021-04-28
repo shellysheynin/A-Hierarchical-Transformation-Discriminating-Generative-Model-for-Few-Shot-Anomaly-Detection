@@ -39,6 +39,7 @@ Common training options:
 --pos_class                 the normal class to train on
 --dataset                   paris/cifar/mnist/fashionmnist/mvtec
 --random_images_download    "True" if training random images from the normal class (otherwise, specify the index of the training image in --index_download)
+--devices_ids                for 10shot we have used --device_ids = 0 1 
 ```
 
 ##  Results and applications
