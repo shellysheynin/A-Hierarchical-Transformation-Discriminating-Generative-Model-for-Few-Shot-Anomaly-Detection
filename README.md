@@ -51,7 +51,7 @@ The model can be also used for defect detection. For example, in the following i
 
 <img src="Images/mvtec_results.png" width="500px">
 
-See section 3.3 in our [paper]() for more details.
+See section 3.3 in our [paper](https://arxiv.org/abs/2104.14535) for more details.
 
 
 ### Citation
