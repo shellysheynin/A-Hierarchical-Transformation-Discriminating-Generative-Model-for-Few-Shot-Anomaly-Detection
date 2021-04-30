@@ -1,6 +1,6 @@
 # HTDG
 
-[Project](https://shellysheynin.github.io/HTDG/) | [Arxiv]() 
+[Project](https://shellysheynin.github.io/HTDG/) | [Arxiv](https://arxiv.org/abs/2104.14535) 
 
 ### Official pytorch implementation of the paper: "HTDG: A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection"
 
