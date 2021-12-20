@@ -1,4 +1,4 @@
-# HTDG
+# A Hierarchical Transformation-Discriminating Generative Model for Few Shot Anomaly Detection
 
 [Project](https://shellysheynin.github.io/HTDG/) | [Arxiv](https://arxiv.org/abs/2104.14535) 
 
